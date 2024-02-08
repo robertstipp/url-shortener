@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend</title>
+</head>
+<body>
+  <form id="shortenUrl">
+    <input type="text" name="url" id="url">
+    <label for="url">Input URL TO Shorten</label>
+    <button type="submit">Generate</button>
+  </form>
+
+  <h1 id="shortenedLink"></h1>
+  <script>
+    const shortenForm = document.getElementById('shortenUrl')
+    const urlInput = document.getElementById('url')
+
+    const shortened = document.getElementById('shortenedLink')
+    shortenForm.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const url = urlInput.value
+      if (url === "") {
+        alert('No URL')
+      } else {
+        const short = await shortenUrl(url)
+        shortened.innerHTML = `http://34.73.2.148:8000/tiny/${short}`
+      }
+    })
+    async function shortenUrl (url) {
+      const response = await fetch('http://34.73.2.148:8000/shorten', {
+        method: "POST", 
+        headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({url}), 
+      })
+      const data = await response.json()
+      return data
+    }
+  </script>
+</body>
+</html>
